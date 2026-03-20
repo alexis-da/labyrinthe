@@ -1,0 +1,15 @@
+{
+  "name": "labyrinthe",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "vite"
+  },
+  "devDependencies": {
+    "vite": "^8.0.0"
+  },
+  "dependencies": {
+    "three": "^0.183.2"
+  }
+}

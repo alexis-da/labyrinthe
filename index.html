@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>labyrinthe</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div id="damage-overlay"></div>
+
+    <div id="hud" class="hidden">
+      <div>SANTE</div>
+      <div id="health-bar">
+        <div id="health-fill"></div>
+      </div>
+    </div>
+
+    <div id="start-screen" class="overlay">
+      <div class="panel">
+        <h1>Escape The Maze</h1>
+        <p>
+          Échappe-toi du labyrinthe et trouve la case de sortie avant le troll.
+        </p>
+        <button id="start-button" type="button">Commencer</button>
+      </div>
+    </div>
+
+    <div id="victory-screen" class="overlay hidden">
+      <div class="panel">
+        <h1>Victoire</h1>
+        <p>Tu as trouvé la sortie du labyrinthe.</p>
+        <button id="replay-button" type="button">Rejouer</button>
+      </div>
+    </div>
+
+    <div id="gameover-screen" class="overlay hidden">
+      <div class="panel">
+        <h1>Game Over</h1>
+        <p>Le troll t'a rattrape.</p>
+        <button id="replay-button-gameover" type="button">Rejouer</button>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
