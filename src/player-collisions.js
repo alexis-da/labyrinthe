@@ -4,6 +4,7 @@ const tmpPlayerBox = new THREE.Box3();
 const tmpCandidateCenter = new THREE.Vector3();
 const tmpProbeX = new THREE.Vector3();
 const tmpProbeZ = new THREE.Vector3();
+const tmpProbeFallback = new THREE.Vector3();
 
 // Instancie la hitbox du joueur à partir de sa position et de ses dimensions
 function setPlayerBox(box, cameraPosition, eyeHeight, colliderSize) {
@@ -74,7 +75,7 @@ export function resolveHorizontalPositionCollision({
   centerYOffset = 0,
   targetBox = tmpPlayerBox,
 }) {
-  if (!wallBoxes.length) return;
+  if (!wallBoxes.length) return "none";
 
   setBoxFromPosition({
     targetBox,
@@ -83,7 +84,7 @@ export function resolveHorizontalPositionCollision({
     centerYOffset,
   });
   if (!intersectsAny(targetBox, wallBoxes)) {
-    return;
+    return "none";
   }
 
   tmpProbeX.set(position.x, position.y, previousPosition.z);
@@ -107,17 +108,46 @@ export function resolveHorizontalPositionCollision({
   if (xFree) {
     position.x = tmpProbeX.x;
     position.z = tmpProbeX.z;
-    return;
+    return "x";
   }
 
   if (zFree) {
     position.x = tmpProbeZ.x;
     position.z = tmpProbeZ.z;
-    return;
+    return "z";
+  }
+
+  // Sur les coins, tente un déplacement réduit avant de rollback total.
+  const moveX = position.x - previousPosition.x;
+  const moveZ = position.z - previousPosition.z;
+  let scale = 0.5;
+
+  while (scale >= 0.125) {
+    tmpProbeFallback.set(
+      previousPosition.x + moveX * scale,
+      position.y,
+      previousPosition.z + moveZ * scale,
+    );
+
+    setBoxFromPosition({
+      targetBox,
+      position: tmpProbeFallback,
+      colliderSize,
+      centerYOffset,
+    });
+
+    if (!intersectsAny(targetBox, wallBoxes)) {
+      position.x = tmpProbeFallback.x;
+      position.z = tmpProbeFallback.z;
+      return "partial";
+    }
+
+    scale *= 0.5;
   }
 
   position.x = previousPosition.x;
   position.z = previousPosition.z;
+  return "rollback";
 }
 
 export function updatePlayerBoundingBoxFromCamera({
