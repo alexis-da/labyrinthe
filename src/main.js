@@ -38,7 +38,7 @@ const controls = new PointerLockControls(camera, renderer.domElement);
 
 const musicManager = createBackgroundMusicManager({
   camera,
-  path: "/assets/horror_music.mp3",
+  path: "/assets/fiddle.mp3",
   volume: 0.62,
   minVolume: 0.04,
   nearDistance: 8,
@@ -62,6 +62,7 @@ function resetGameState() {
   ui.startGameUI();
   ui.setDamageOverlay(0);
   ui.setHealthRatio(1);
+  ui.setFlashBatteryRatio(1);
   controls.lock();
   musicManager.tryStart();
 }
@@ -238,9 +239,9 @@ const combatSystem = createCombatSystem({
 
 const lookDirection = new THREE.Vector3();
 const clock = new THREE.Clock();
-const flashBatteryMax = 100;
-const flashDrainPerSecond = 28;
-const flashRechargePerSecond = 20;
+const flashBatteryMax = 300;
+const flashDrainPerSecond = 12;
+const flashRechargePerSecond = 30;
 let flashBattery = flashBatteryMax;
 let isFlashlightOn = true;
 
@@ -290,6 +291,7 @@ function animate() {
 
   playerController.update(delta, isGameActive);
   flashlightUpdate(delta, isGameActive);
+  ui.setFlashBatteryRatio(flashBattery / flashBatteryMax);
 
   if (
     isGameActive &&

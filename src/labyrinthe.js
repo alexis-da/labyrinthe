@@ -42,7 +42,7 @@ function generateMazeGrid(size) {
 
 export async function createProceduralMaze(options = {}) {
   const {
-    size = 21,
+    size = 11,
     wallHeight = 3,
     floorThickness = 0.1,
     wallTexturePath = "/assets/wall.png",

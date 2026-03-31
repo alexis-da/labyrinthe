@@ -10,6 +10,7 @@ export function createUIManager({ onStart, onReplay }) {
   const damageOverlay = document.getElementById("damage-overlay");
   const hud = document.getElementById("hud");
   const healthFill = document.getElementById("health-fill");
+  const flashBatteryFill = document.getElementById("flash-battery-fill");
 
   startButton?.addEventListener("click", () => {
     onStart?.();
@@ -47,6 +48,13 @@ export function createUIManager({ onStart, onReplay }) {
       if (!damageOverlay) return;
       const clamped = Math.max(0, Math.min(1, alpha));
       damageOverlay.style.opacity = clamped.toFixed(3);
+    },
+    setFlashBatteryRatio(ratio) {
+      if (!flashBatteryFill) return;
+      const clamped = Math.max(0, Math.min(1, ratio));
+      flashBatteryFill.style.width = `${(clamped * 100).toFixed(2)}%`;
+      flashBatteryFill.style.filter =
+        clamped <= 0.15 ? "brightness(1.2)" : "none";
     },
   };
 }
